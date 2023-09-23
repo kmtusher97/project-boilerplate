@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  lms_client:
+    container_name: lms_client
+    build:
+      context: client
+      dockerfile: Dockerfile
+    depends_on:
+      - lms_server
+    ports:
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - ./client/src:/code/src
+
+  lms_server:
+    container_name: lms_server
+    build:
+      context: server
+      dockerfile: Dockerfile
+    depends_on:
+      - lms_mongo
+    ports:
+      - 5000:5000
+    restart: on-failure
+    volumes:
+      - ./server/src:/code/src
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://lms_mongo:27017/lms
+      - SECRET_KEY=my-secret-key
+      - TOKEN_DURATION=1h
+
+  lms_mongo:
+    container_name: lms_mongo
+    image: mongo
+    ports:
+      - 27017:27017
