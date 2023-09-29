@@ -1,16 +1,19 @@
 import { AppRoutes } from './routes/AppRoutes';
 
 import { AuthProvider } from './contexts/AuthContext';
+import { QueryProvider } from './contexts/QueryProvider';
 
 import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="App">
-        <AppRoutes />
-      </div>
-    </AuthProvider>
+    <QueryProvider>
+      <AuthProvider>
+        <div className="App">
+          <AppRoutes />
+        </div>
+      </AuthProvider>
+    </QueryProvider>
   );
 }
 

@@ -1,32 +1,55 @@
-import { Box } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
+import { Box, Button, Modal } from '@mui/material';
+
+import { useCourses } from '../hooks/useCourses';
+
 import { CourseCard } from '../components/CourseCard';
+import { CreateCourseForm } from '../components/CreateCourseForm';
 
 export const CoursesPage = () => {
-  const courses = [
-    {
-      id: 1,
-      name: 'MERN & PERN',
-      description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.`,
-      price: 5000,
-      startDate: new Date().toLocaleDateString(),
-    },
-  ];
+  const { coursesQuery } = useCourses();
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleCloseForm = () => setOpenModal(false);
+
+  if (coursesQuery.isLoading) {
+    return <h1>Loading!!!!!</h1>;
+  }
+
   return (
-    <Box
-      className="my-box"
-      sx={{
-        display: 'flex',
-        gap: '24px',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        paddingX: '24px',
-        paddingY: '8px',
-      }}
-    >
-      {courses.map((course) => (
-        <CourseCard key={course.id} course={course} />
-      ))}
+    <Box>
+      <Box
+        className="my-box"
+        sx={{
+          display: 'flex',
+          gap: '24px',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          paddingX: '24px',
+          paddingY: '8px',
+        }}
+      >
+        {(coursesQuery.data || []).map((course) => (
+          <CourseCard key={course._id} course={course} />
+        ))}
+      </Box>
+      <Button onClick={() => setOpenModal(true)}>+ Add Course</Button>
+      <Modal
+        open={openModal}
+        onClose={handleCloseForm}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            marginTop: '72px',
+            bgcolor: 'background.paper',
+          }}
+        >
+          <CreateCourseForm onCloseForm={handleCloseForm} />
+        </Box>
+      </Modal>
     </Box>
   );
 };
