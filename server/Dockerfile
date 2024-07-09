@@ -1,4 +1,4 @@
-FROM node:16.17.1
+FROM node:20.10-slim
 
 WORKDIR /code
 
@@ -9,4 +9,4 @@ RUN yarn install
 
 COPY . .
 
-CMD ["yarn", "dev"]
+CMD [ "yarn", "start" ]
