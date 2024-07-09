@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   lms_client:
     container_name: lms_client
