@@ -21,6 +21,9 @@ app.use(
 
 connectMongoDB();
 
+app.use('/health', (req, res) => {
+  res.send('ok');
+});
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', courseRoutes);
