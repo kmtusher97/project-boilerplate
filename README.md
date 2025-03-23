@@ -2,12 +2,15 @@
 
 > install docker and docker-compose or docker desktop
 
-> `docker compose up -d lms_mongo`
+> `docker compose up -d my-mongodb`
 
 > connect the mongo container to any mongo client like (Mongodb Atlas/Studio 3T) and create a db named `lms`. Or create it using cli inside `lms_mongo` container
 
-> `docker compose up lms_client`
+> `docker compose up -d lms-client`
 
+If we change anything in the docker files or add a new package
+
+> `docker compose up -d lms-client --build`
 ---
 
 ### manual commands

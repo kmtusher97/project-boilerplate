@@ -1,0 +1,56 @@
+networks:
+  lms-network:
+
+services:
+  lms-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: lms-client
+    networks:
+      - lms-network 
+    depends_on:
+      - lms-server
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client/src:/code/src
+    environment:
+      - REACT_APP_BASE_URL=http://localhost:5000/api
+
+  lms-server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      args:
+        - NODE_VERSION=20
+        - ENVIRONMENT=development
+    container_name: lms-server
+    networks:
+      - lms-network
+    depends_on:
+      - lms-mongo
+    ports:
+      - 5000:5000
+    volumes:
+      - ./server/src:/code/src
+    environment:
+      - PORT=5000 
+      - SECRET_KEY=my-secret-key 
+      - TOKEN_DURATION=1h 
+      - MONGO_URI=mongodb://root:example@my-mongodb:27017/ 
+      - MONGO_DB_NAME=lms
+  
+  lms-mongo:
+    image: mongo
+    container_name: my-mongodb
+    networks:
+      - lms-network
+    ports:
+      - 27017:27017
+    volumes:
+      - ./.mongo-data/data:/data/db
+      - ./.mongo-data/config:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
