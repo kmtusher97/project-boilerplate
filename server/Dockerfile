@@ -1,4 +1,8 @@
-FROM node:20-slim
+ARG NODE_VERSION=20
+FROM node:${NODE_VERSION}-slim
+
+ARG ENVIRONMENT=production
+ENV NODE_ENV=${ENVIRONMENT}
 
 WORKDIR /code
 
@@ -11,4 +15,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD [ "yarn", "dev" ]
+CMD [ "sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then yarn dev; else yarn start; fi" ]

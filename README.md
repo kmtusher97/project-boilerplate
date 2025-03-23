@@ -29,7 +29,15 @@ docker run \
 
 # build server docker image
 
+# build image for production
 docker build -t lms-server:0.0.1 ./server/
+
+# build image for development
+docker build \
+  -t lms-server:0.0.1 \
+  --build-arg NODE_VERSION=20 \
+  --build-arg ENVIRONMENT=development \
+  ./server/
 
 # run server docker container
 docker run \
